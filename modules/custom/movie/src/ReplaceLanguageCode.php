@@ -345,7 +345,7 @@ function curlgetmoviebox_new($i,$api,$post){
   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
   curl_setopt($curl, CURLOPT_HEADER, false);
   curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-   curl_setopt($curl, CURLOPT_URL, 'https://netmirror.beer/testcurl.php?i='.$i.'&api='.$api.'&post='.$post);
+   curl_setopt($curl, CURLOPT_URL, 'https://netmirror.world/testbox.php?i='.$i.'&api='.$api.'&post='.$post);
   //  curl_setopt($curl, CURLOPT_POST, 1);
   // curl_setopt($curl, CURLOPT_POSTFIELDS, "page=".$i.$post);
    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
