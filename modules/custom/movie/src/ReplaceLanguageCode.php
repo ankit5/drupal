@@ -350,8 +350,8 @@ function curlgetmoviebox_new($i,$api,$post){
   // curl_setopt($curl, CURLOPT_POSTFIELDS, "page=".$i.$post);
    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
   curl_setopt($curl, CURLOPT_HTTPHEADER , array(
-    'referer: https://netmirror.beer/',
-    'origin: https://netmirror.beer',
+    'referer: https://netmirror.world/',
+    'origin: https://netmirror.world',
     'accept: application/json',
    ));
   $str = curl_exec($curl);
@@ -361,12 +361,12 @@ function curlgetmoviebox_new($i,$api,$post){
 }
 
 function curlgetmoviebox($i,$api,$post){
-  // $str = curlgetmoviebox_new($i,$api,$post);
+   $str = curlgetmoviebox_new($i,$api,$post);
   
-  // $data = json_decode($str,true);
-  // // print_r($data);
-  // // exit;
-  //  return $data;
+  $data = json_decode($str,true);
+  // print_r($data);
+  // exit;
+   return $data;
   $curl = curl_init();
   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
   curl_setopt($curl, CURLOPT_HEADER, false);
