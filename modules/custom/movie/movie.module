@@ -413,7 +413,9 @@ if (
   $query->addOrderBy(NULL, $case, 'ASC', 'search_rank');
 
   // OPTIONAL: newest first
+
    $query->addOrderBy('node_field_data', 'sticky', 'DESC');
+ $query->addOrderBy('node_field_data', 'created', 'DESC');
 }
 
 /////////////////////////////
