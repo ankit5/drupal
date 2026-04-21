@@ -89,10 +89,12 @@ return $slug;
     // Extract season numbers
     $seasons = array_column($data, 'se');
 
-     // ❌ Remove season 0
+    // ❌ Remove only season 0
     $seasons = array_filter($seasons, function($s) {
-        return $s > 0;
+        return $s != 0;
     });
+
+    if (empty($seasons)) return '';
 
     // Clean + sort
     $seasons = array_unique($seasons);
@@ -123,8 +125,7 @@ return $slug;
         : 'S' . $start . '-S' . $prev;
 
     return implode(', ', $ranges);
-}
-  
+}  
   public function term_json($string,$string2){
     
     $arr = explode(",",$string);
