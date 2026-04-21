@@ -89,6 +89,11 @@ return $slug;
     // Extract season numbers
     $seasons = array_column($data, 'se');
 
+     // ❌ Remove season 0
+    $seasons = array_filter($seasons, function($s) {
+        return $s > 0;
+    });
+
     // Clean + sort
     $seasons = array_unique($seasons);
     sort($seasons);
