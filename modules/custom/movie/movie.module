@@ -304,6 +304,7 @@ if (
       LOWER(node_field_data.title),
     ' ', ''),
     '-', ''),
+    ',', ''),
     ':', ''),
     '[', ''),
     ']', ''),
@@ -311,7 +312,7 @@ if (
   ";
 
   // ✅ CLEAN KEYWORD
-  $keyword_clean = str_replace([' ', '-', ':', '[', ']', '.'], '', implode('', $main_words));
+  $keyword_clean = str_replace([' ', '-', ',', ':', '[', ']', '.'], '', implode('', $main_words));
 
   // ✅ SMART WHERE (BEST LOGIC)
   $must_conditions = [];
@@ -320,7 +321,7 @@ if (
 
   foreach ($main_words as $i => $word) {
 
-    $word_clean = str_replace([' ', '-', ':', '[', ']', '.'], '', $word);
+    $word_clean = str_replace([' ', '-', '-', ':', '[', ']', '.'], '', $word);
     $ph = ':mw' . $i;
 
     if ($i < 2) {
