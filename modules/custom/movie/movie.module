@@ -222,11 +222,11 @@ if($page > 38){
 }
 
 /////////////////////////////
-
 if (
-  ($view->current_display === 'page_1' || 
-   $view->current_display === 'rest_export_1' || 
-   $view->current_display === 'rest_export_2' || $view->current_display === 'rest_export_3') && 
+  ($view->current_display === 'page_1' ||
+   $view->current_display === 'rest_export_1' ||
+   $view->current_display === 'rest_export_2' ||
+   $view->current_display === 'rest_export_3') &&
   (!empty($view->exposed_raw_input['query']) || !empty($view->exposed_raw_input['title_2']))
 ) {
 
@@ -254,22 +254,22 @@ if (
     ? $exposed['query']
     : ($exposed['title_2'] ?? '');
 
-  // Clean keyword
-  $keyword = preg_replace('/[^\p{L}\p{N}\s\.]+/u', '', $keyword);
+  // ✅ CLEAN KEYWORD
+  $keyword = preg_replace('/[^\p{L}\p{N}\s\.,]+/u', '', $keyword);
   $keyword = strtolower(trim(urldecode($keyword)));
-  $keyword = str_replace('and ','&',$keyword);
+  $keyword = str_replace('and ', '&', $keyword);
 
   if ($keyword === '') return;
 
   $connection = \Drupal::database();
 
-  // ✅ STOP WORDS (IMPORTANT FIX)
+  // ✅ STOP WORDS
   $stop_words = [
-    'movie','full','hd','film','part','season','episode'
+    'movie', 'full', 'hd', 'film', 'part', 'season', 'episode'
   ];
 
   // ✅ LANGUAGE LIST
-  $languages = ['hindi','tamil','english','telugu','kannada'];
+  $languages = ['hindi', 'tamil', 'english', 'telugu', 'kannada'];
 
   $words = preg_split('/\s+/', $keyword);
 
@@ -298,44 +298,42 @@ if (
     $main_words = $words;
   }
 
-  // ✅ CLEAN TITLE (CRITICAL)
+  // ✅ CLEAN TITLE (comma added)
   $title_clean = "
-    REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+    REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
       LOWER(node_field_data.title),
     ' ', ''),
     '-', ''),
-    ',', ''),
     ':', ''),
+    ',', ''),
     '[', ''),
     ']', ''),
     '.', '')
   ";
 
-  // ✅ CLEAN KEYWORD
-  $keyword_clean = str_replace([' ', '-', ',', ':', '[', ']', '.'], '', implode('', $main_words));
+  // ✅ CLEAN KEYWORD (comma added)
+  $keyword_clean = str_replace([' ', '-', ':', ',', '[', ']', '.'], '', implode('', $main_words));
 
-  // ✅ SMART WHERE (BEST LOGIC)
+  // ✅ SMART WHERE
   $must_conditions = [];
   $optional_conditions = [];
   $args = [];
 
   foreach ($main_words as $i => $word) {
 
-    $word_clean = str_replace([' ', '-', '-', ':', '[', ']', '.'], '', $word);
+    $word_clean = str_replace([' ', '-', ':', ',', '[', ']', '.'], '', $word);
     $ph = ':mw' . $i;
 
     if ($i < 2) {
-      // First 2 words = MUST match
       $must_conditions[] = "$title_clean LIKE $ph";
     } else {
-      // Rest = optional
       $optional_conditions[] = "$title_clean LIKE $ph";
     }
 
     $args[$ph] = '%' . $connection->escapeLike($word_clean) . '%';
   }
 
-  // OPTIONAL NUMBERS (S1, 2, etc.)
+  // ✅ OPTIONAL NUMBERS
   $optional_sql = [];
   foreach ($optional_words as $i => $word) {
     $ph = ':ow' . $i;
@@ -343,7 +341,7 @@ if (
     $args[$ph] = '%' . $connection->escapeLike($word) . '%';
   }
 
-  // BUILD WHERE
+  // ✅ BUILD WHERE
   $where_sql = '1=1';
 
   if (!empty($must_conditions)) {
@@ -372,13 +370,13 @@ if (
   $case_start = $connection->quote($keyword_clean . '%');
   $case_full  = $connection->quote('%' . $keyword_clean . '%');
 
-  // LANGUAGE BOOST
+  // ✅ LANGUAGE BOOST
   $lang_case = '';
   if (!empty($lang)) {
     $lang_case = "WHEN LOWER(node_field_data.title) LIKE " . $connection->quote('%[' . $lang . ']%') . " THEN 2";
   }
 
-  // NUMBER BOOST
+  // ✅ NUMBER BOOST
   $number_case = '';
   if (!empty($optional_words)) {
     $number_case = "WHEN $title_clean LIKE '%" . $optional_words[0] . "%' THEN 4";
@@ -412,13 +410,9 @@ if (
 
   // ✅ APPLY SORT
   $query->addOrderBy(NULL, $case, 'ASC', 'search_rank');
-
-  // OPTIONAL: newest first
-
-   $query->addOrderBy('node_field_data', 'sticky', 'DESC');
- $query->addOrderBy('node_field_data', 'created', 'DESC');
+  $query->addOrderBy('node_field_data', 'sticky', 'DESC');
+  $query->addOrderBy('node_field_data', 'created', 'DESC');
 }
-
 /////////////////////////////
 
 
