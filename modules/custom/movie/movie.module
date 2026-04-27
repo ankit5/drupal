@@ -222,6 +222,7 @@ if($page > 38){
 }
 
 /////////////////////////////
+
 if (
   ($view->current_display === 'page_1' ||
    $view->current_display === 'rest_export_1' ||
@@ -255,8 +256,10 @@ if (
     : ($exposed['title_2'] ?? '');
 
   // ✅ CLEAN KEYWORD
+  $keyword = urldecode($keyword);
+  $keyword = str_replace("'", '', $keyword); // remove apostrophe
   $keyword = preg_replace('/[^\p{L}\p{N}\s\.,]+/u', '', $keyword);
-  $keyword = strtolower(trim(urldecode($keyword)));
+  $keyword = strtolower(trim($keyword));
   $keyword = str_replace('and ', '&', $keyword);
 
   if ($keyword === '') return;
@@ -279,7 +282,9 @@ if (
 
   foreach ($words as $w) {
 
-    if (in_array($w, $stop_words)) continue;
+    $w = trim($w, " \t\n\r\0\x0B'"); // remove apostrophe from each word
+
+    if ($w === '' || in_array($w, $stop_words)) continue;
 
     if (in_array($w, $languages)) {
       $lang = $w;
@@ -298,21 +303,26 @@ if (
     $main_words = $words;
   }
 
-  // ✅ CLEAN TITLE (comma added)
+  // ✅ CLEAN TITLE (apostrophe removed)
   $title_clean = "
-    REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+    REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
       LOWER(node_field_data.title),
     ' ', ''),
     '-', ''),
     ':', ''),
     ',', ''),
+    '''', ''),
     '[', ''),
     ']', ''),
     '.', '')
   ";
 
-  // ✅ CLEAN KEYWORD (comma added)
-  $keyword_clean = str_replace([' ', '-', ':', ',', '[', ']', '.'], '', implode('', $main_words));
+  // ✅ CLEAN KEYWORD (apostrophe removed)
+  $keyword_clean = str_replace(
+    [' ', '-', ':', ',', "'", '[', ']', '.'],
+    '',
+    implode('', $main_words)
+  );
 
   // ✅ SMART WHERE
   $must_conditions = [];
@@ -321,7 +331,7 @@ if (
 
   foreach ($main_words as $i => $word) {
 
-    $word_clean = str_replace([' ', '-', ':', ',', '[', ']', '.'], '', $word);
+    $word_clean = str_replace([' ', '-', ':', ',', "'", '[', ']', '.'], '', $word);
     $ph = ':mw' . $i;
 
     if ($i < 2) {
@@ -413,11 +423,8 @@ if (
   $query->addOrderBy('node_field_data', 'sticky', 'DESC');
   $query->addOrderBy('node_field_data', 'created', 'DESC');
 }
-/////////////////////////////
 
-
-
-
+///////////////
  if ($view->id() == "detail_movie"){
  //exit;
  $link_array = explode('/',$_SERVER["REQUEST_URI"]);
