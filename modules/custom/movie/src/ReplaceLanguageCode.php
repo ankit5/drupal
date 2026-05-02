@@ -514,8 +514,7 @@ function save_movie_box($items,$platform='',$month='',$block_id='',$i=''){
      // $post = $post['subjectList'];
      // $post['duration']=$post['durationSeconds'];
     }
-     var_export($post);
-    exit;
+    
     
     $query = \Drupal::database()->select('node__field_subjectid', 't');
     $query->fields('t', ['entity_id']);
@@ -548,9 +547,12 @@ function save_movie_box($items,$platform='',$month='',$block_id='',$i=''){
     
     if(!empty($post['countryName'])){
      if($post['countryName']=='Nigeria'){
-      return true;
+      return '';
      }
     }
+
+       var_export($post);
+    exit;
    
     
     //channel
