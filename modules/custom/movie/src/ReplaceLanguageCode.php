@@ -345,13 +345,13 @@ function curlgetmoviebox_new($i,$api,$post){
   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
   curl_setopt($curl, CURLOPT_HEADER, false);
   curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-   curl_setopt($curl, CURLOPT_URL, 'https://netmirr.net/testbox.php?i='.$i.'&api='.$api.'&post='.$post);
+   curl_setopt($curl, CURLOPT_URL, 'https://test.netmirr.net/testbox.php?i='.$i.'&api='.$api.'&post='.$post);
   //  curl_setopt($curl, CURLOPT_POST, 1);
   // curl_setopt($curl, CURLOPT_POSTFIELDS, "page=".$i.$post);
    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
   curl_setopt($curl, CURLOPT_HTTPHEADER , array(
-    'referer: https://netmirr.net/',
-    'origin: https://netmirr.net',
+    'referer: https://test.netmirr.net/',
+    'origin: https://test.netmirr.net',
     'accept: application/json',
    ));
   $str = curl_exec($curl);
