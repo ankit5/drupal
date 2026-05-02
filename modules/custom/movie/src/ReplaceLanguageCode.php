@@ -544,15 +544,15 @@ function save_movie_box($items,$platform='',$month='',$block_id='',$i=''){
     
         }
     else if($result<1){
-    
+      var_export($post);
+    exit;
     if(!empty($post['countryName'])){
      if($post['countryName']=='Nigeria'){
       return '';
      }
     }
 
-       var_export($post);
-    exit;
+     
    
     
     //channel
