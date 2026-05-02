@@ -544,11 +544,11 @@ function save_movie_box($items,$platform='',$month='',$block_id='',$i=''){
     
         }
     else if($result<1){
-      var_export($post);
-    exit;
+    //   var_export($post);
+    // exit;
     if(!empty($post['countryName'])){
      if($post['countryName']=='Nigeria'){
-      return '';
+    //  return '';
      }
     }
 
@@ -570,7 +570,7 @@ function save_movie_box($items,$platform='',$month='',$block_id='',$i=''){
 //     print "</pre>";
 // exit;
     
-      if($post['title'] && $post['subjectType']<=2){
+      if($post['title'] && $post['subjectType']<=2 && $post['countryName']!='Nigeria'){
 
          /////tags
     $field_tags =[];
