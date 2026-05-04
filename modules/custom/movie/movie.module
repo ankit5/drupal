@@ -261,6 +261,7 @@ if (
   $keyword = preg_replace('/[^\p{L}\p{N}\s\.,]+/u', '', $keyword);
   $keyword = strtolower(trim($keyword));
   $keyword = str_replace(' and ', '&', $keyword);
+$keyword = str_replace(' english', '', $keyword);
 
   if ($keyword === '') return;
 
