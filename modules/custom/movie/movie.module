@@ -223,6 +223,15 @@ if($page > 38){
 
 /////////////////////////////
 
+// Support clean URL: /api/movie/search_new2/{query}
+if (
+  in_array($view->current_display, ['rest_export_1', 'rest_export_2', 'rest_export_3'], true) &&
+  empty($view->exposed_raw_input['query']) &&
+  !empty($view->args[0])
+) {
+  $view->exposed_raw_input['query'] = $view->args[0];
+}
+
 if (
   ($view->current_display === 'page_1' ||
    $view->current_display === 'rest_export_1' ||
