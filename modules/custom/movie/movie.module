@@ -4,6 +4,24 @@ use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\block_content\Entity\BlockContent;
 
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function movie_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  // Support REST path:
+  // /api/movie/search2/{query}
+  if (
+    in_array($display_id, ['rest_export_1', 'rest_export_2', 'rest_export_3'], true) &&
+    empty($view->exposed_raw_input['query']) &&
+    !empty($args[0])
+  ) {
+    $view->exposed_raw_input['query'] = $args[0];
+  }
+}
+
 
 
 function movie_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
@@ -223,16 +241,7 @@ if($page > 38){
 
 /////////////////////////////
 
-// Support clean URL: /api/movie/search_new2/{query}
-if (
-  in_array($view->current_display, ['rest_export_1', 'rest_export_2', 'rest_export_3'], true) &&
-  empty($view->exposed_raw_input['query']) &&
-  !empty($view->args[0])
-) {
-  $view->exposed_raw_input['query'] = $view->args[0];
-print $view->args[0];
-exit;
-}
+
 
 if (
   ($view->current_display === 'page_1' ||
