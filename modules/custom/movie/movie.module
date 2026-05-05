@@ -18,6 +18,8 @@ function movie_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
     empty($view->exposed_raw_input['query']) &&
     !empty($args[0])
   ) {
+print $args[0];
+exit;
     $view->exposed_raw_input['query'] = $args[0];
   }
 }
