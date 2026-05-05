@@ -244,10 +244,12 @@ if($page > 38){
 
 if (
   in_array($view->current_display, ['rest_export_1', 'rest_export_2', 'rest_export_3'], true) &&
-  empty($view->exposed_raw_input['query']) &&
-  !empty($view->args[0])
+  empty($view->exposed_raw_input['query'])
 ) {
-print $view->args[0];
+$path = \Drupal::service('path.current')->getPath();
+$last = basename($path);
+
+echo urldecode($last);
 exit;
   $view->exposed_raw_input['query'] = $view->args[0];
 }
