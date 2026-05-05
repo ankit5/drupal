@@ -242,6 +242,7 @@ if (
 
   $exposed = $view->exposed_raw_input;
 
+//
   // ✅ REMOVE DEFAULT TITLE FILTERS
   if (!empty($query->where) && is_array($query->where)) {
     foreach ($query->where as $gid => $group) {
