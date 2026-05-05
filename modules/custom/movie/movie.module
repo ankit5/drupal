@@ -230,6 +230,8 @@ if (
   !empty($view->args[0])
 ) {
   $view->exposed_raw_input['query'] = $view->args[0];
+print $view->args[0];
+exit;
 }
 
 if (
