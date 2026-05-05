@@ -243,8 +243,7 @@ if($page > 38){
 /////////////////////////////
 
 if (
-  in_array($view->current_display, ['rest_export_1', 'rest_export_2', 'rest_export_3'], true) &&
-  empty($view->exposed_raw_input['query'])
+  in_array($view->current_display, ['rest_export_1', 'rest_export_2', 'rest_export_3'], true)
 ) {
 $path = \Drupal::service('path.current')->getPath();
 $last = basename($path);
